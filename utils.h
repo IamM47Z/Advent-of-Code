@@ -1,10 +1,11 @@
 #pragma once
 
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-int getDayInput(int day, char** ptr_output)
+int getDayInput(const int day, char** ptr_output)
 {
     char filename[12];
     snprintf(filename, 12, "day%d.input", day);
@@ -19,16 +20,22 @@ int getDayInput(int day, char** ptr_output)
 
     rewind(ptr_file);
 
-    *ptr_output = (char*)malloc(sizeof(char) * size);
-    if (!*ptr_output)
+    char* output = (char*)malloc(sizeof(char) * size);
+    if (!output)
     {
         fclose(ptr_file);
         return -1;
     }
 
-    fread(*ptr_output, 1, size, ptr_file);
+    fread(output, 1, size, ptr_file);
 
     fclose(ptr_file);
 
+    *ptr_output = output;
     return size;
+}
+
+int digits_in_number(const int number)
+{
+    return number == 0 ? 1 : (log10(number) + 1);
 }
