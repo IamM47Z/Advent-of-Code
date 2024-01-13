@@ -16,7 +16,7 @@ int main(void)
     if (data_size == -1)
         return 1;
 
-    const Bag bag = bag_create(12, 13, 14);
+    const Bag bag = bagCreate(12, 13, 14);
 
     int sum = 0;
     for (char* ptr = strtok(data, "\n"); ptr != NULL; ptr = strtok(NULL, "\n"))
@@ -24,9 +24,9 @@ int main(void)
         int game_id = 0;
         sscanf(ptr, "Game %d:", &game_id);
 
-        Game* game = game_create(game_id);
+        Game* game = gameCreate(game_id);
 
-        char* start = ptr + 5 + digits_in_number(game_id) + 1;
+        char* start = ptr + 5 + digitsInNumber(game_id) + 1;
         do
         {
             int red_cubes = 0;
@@ -39,7 +39,7 @@ int main(void)
                 int quantity = 0;
                 sscanf(start, " %d %s", &quantity, color);
 
-                switch (get_color_by_name(color))
+                switch (getColorByName(color))
                 {
                     case RED:
                         red_cubes += quantity;
@@ -54,24 +54,24 @@ int main(void)
                     {
                         printf("Invalid color: %s -> %s\n", color, ptr);
 
-                        game_destroy(game);
+                        gameDestroy(game);
                         return -1;
                     }
                 }
 
-                start += 1 + digits_in_number(quantity) + 1 + strlen(color);
+                start += 1 + digitsInNumber(quantity) + 1 + strlen(color);
             } while (start[-1] == ',');
 
-            game_result_add(game, red_cubes, green_cubes, blue_cubes);
+            gameResultAdd(game, red_cubes, green_cubes, blue_cubes);
         } while (start[-1] == ';');
         
-        if (game_is_valid(game, bag))
+        if (gameIsValid(game, bag))
         {
             printf("Adding game with id: %d\n", game->id);
             sum += game->id;
         }
 
-        game_destroy(game);
+        gameDestroy(game);
         game = NULL;
     }
 
